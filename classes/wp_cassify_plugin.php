@@ -459,9 +459,9 @@ class WP_Cassify_Plugin {
 					if ( $this->wp_cassify_is_user_account_expired( $cas_user_datas, $wp_cassify_expiration_rules ) ) {
 						
 						$notification_rule_matched = $this->wp_cassify_notification_rule_matched( 
+							'when_user_account_expire',
 							$cas_user_datas, 
-							$wp_cassify_notification_rules, 
-							'when_user_account_expire'
+							$wp_cassify_notification_rules
 						);
 						
 						if ( $notification_rule_matched ) {
@@ -491,12 +491,12 @@ class WP_Cassify_Plugin {
 						if ( $wordpress_user_id > 0 ) {
 							$wordpress_user_account_created = true;
 							
-							$notification_rule_matched = $this->wp_cassify_notification_rule_matched( 
+							$notification_rule_matched = $this->wp_cassify_notification_rule_matched(
+								'after_user_account_created',
 								$cas_user_datas, 
-								$wp_cassify_notification_rules, 
-								'after_user_account_created'
+								$wp_cassify_notification_rules
 							);
-							
+
 							if ( $notification_rule_matched ) {
 								// Define custom plugin hook to send notification after user account has been created.
 								do_action( 'wp_cassify_send_notification', 'User account has been created :' . $cas_user_datas[ 'cas_user_id' ] );							
@@ -539,9 +539,9 @@ class WP_Cassify_Plugin {
 				do_action( 'wp_cassify_after_auth_user_wordpress', $cas_user_datas );
 
 				$notification_rule_matched = $this->wp_cassify_notification_rule_matched( 
+					'after_user_login',
 					$cas_user_datas, 
-					$wp_cassify_notification_rules, 
-					'after_user_login'
+					$wp_cassify_notification_rules
 				);
 				
 				if ( $notification_rule_matched ) {
@@ -672,9 +672,9 @@ class WP_Cassify_Plugin {
 			$wp_cassify_notification_rules = unserialize( WP_Cassify_Utils::wp_cassify_get_option( $this->wp_cassify_network_activated, 'wp_cassify_notification_rules' ) );
  		
 			$notification_rule_matched = $this->wp_cassify_notification_rule_matched( 
-				$cas_user_datas, 
-				$wp_cassify_notification_rules, 
-				'after_user_logout'
+				'after_user_logout',
+				$cas_user_datas,
+				$wp_cassify_notification_rules
 			);
 		
 			if ( $notification_rule_matched ) {
@@ -1359,12 +1359,12 @@ class WP_Cassify_Plugin {
 
 	/**
 	 * Check if user is matched by Notification Rule
+	 * @param 	array 	$trigger_name				The name of the action wich fire the notification
 	 * @param	array 	$cas_user_datas				Associative array containing CAS userID and attributes
 	 * @param 	array 	$notification_rules			Array containing all notification rules
-	 * @param 	array 	$trigger_name				The name of the action wich fire the notification
 	 * @return 	boolean	$notification_rule_matched	Return true if notification rule assertion is verified. Return false on the other hand.
 	 */ 	
-	private function wp_cassify_notification_rule_matched( $cas_user_datas = array(), $notification_rules = array(), $trigger_name ) {
+	private function wp_cassify_notification_rule_matched( $trigger_name, $cas_user_datas = array(), $notification_rules = array() ) {
 		
 		$notification_rule_matched = false;
 
