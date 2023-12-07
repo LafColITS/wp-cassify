@@ -223,7 +223,7 @@ class WP_Cassify_Plugin {
 	 */	 
 	public function wp_cassify_session_start() {
 
-		if(! session_id() ) {
+		if(! session_id() && php_sapi_name() !== 'cli' ) {
 			session_start();
 		}
 	}
