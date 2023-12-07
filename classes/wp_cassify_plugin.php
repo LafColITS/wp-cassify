@@ -582,7 +582,7 @@ class WP_Cassify_Plugin {
 		$service_url = $this->wp_cassify_get_service_callback_url();
 		$service_ticket = $this->wp_cassify_get_service_ticket();
 		
-		$current_user = null;
+		$current_user = wp_get_current_user();
 		
 		if ( ( (! is_user_logged_in() ) && (! empty( $wp_cassify_base_url ) ) ) || ( $gateway_mode == TRUE ) )  {	
 			if (! $this->wp_cassify_is_in_while_list( $service_url ) ) {	
@@ -1141,7 +1141,7 @@ class WP_Cassify_Plugin {
 		 
 		 if ( ( is_array( $white_list_urls ) ) && ( count( $white_list_urls ) > 0 ) ){
 			foreach( $white_list_urls as $white_url ) {
-				if ( strrpos( $url, $white_url, -strlen( $url ) ) !== false ) {
+				if ( strlen( $white_url ) > 0 && strrpos( $url, $white_url, strlen( site_url() ) ) !== false )  {
 					$is_in_while_list = true;
 				}
 			} 
